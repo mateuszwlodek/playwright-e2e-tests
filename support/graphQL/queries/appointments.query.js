@@ -244,4 +244,4 @@ fragment breakFields on Break {
   __typename
 }`
 }
-export default appointments;
+module.exports = { appointments }
