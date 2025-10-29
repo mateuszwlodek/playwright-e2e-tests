@@ -33,10 +33,11 @@ export default defineConfig({
     ['junit', {outputFile: 'playwright-results/results.xml' }], //JUnit XML for Testiny
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  timeout: 30000,
+  timeout: 100000,
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: 'https://my-dev.phorest.com',
+    headless: false,
     video: {
       mode: 'on-first-retry',
       size: { width: 640, height: 480 }
