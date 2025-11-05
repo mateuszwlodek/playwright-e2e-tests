@@ -29,8 +29,7 @@ export default defineConfig({
   reporter: [
     ['list'], //console output
     ['json', {outputFile:'playwright-report/json/test-results.json'}], //JSON for slack 
-    ['html', {outputFolder: 'playwright-report/html'}], //HTML report
-    ['junit', {outputFile: 'playwright-results/results.xml' }], //JUnit XML for Testiny
+    ['html', {outputFolder: 'playwright-report/html'}]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   timeout: 100000,
@@ -83,12 +82,7 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-
-
-
   ],
-
- 
 
   /* Run your local dev server before starting the tests */
   // webServer: {
