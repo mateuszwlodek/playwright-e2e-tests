@@ -4,7 +4,7 @@
 
 set -e
 
-JOB_NAME="${JOB_NAME:-Playwright E2E Tests}"
+JOB_NAME="${GITHUB_WORKFLOW:-${JOB_NAME:-Playwright E2E Tests}}"
 CI_URL="${CI_URL:-}"
 PLAYWRIGHT_RESULTS_FILE="playwright-report/json/test-results.json"
 
