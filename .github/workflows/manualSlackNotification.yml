@@ -56,13 +56,9 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
       continue-on-error: true
-    - name: Debug JSON
-      run: ls -R playwright-report/json
-    - name: Debug - list files
-      run: ls -R
     - name: Make notify-slack.sh executable
       run: chmod +x ./slack_results/notify-slack.sh
-    - name: Notify Slack (success) 
+    - name: Notify Slack
       if: success()
       run: ./slack_results/notify-slack.sh
       env:
