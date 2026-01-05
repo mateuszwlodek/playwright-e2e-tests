@@ -107,10 +107,23 @@ else
   SUMMARY_TEXT="Test results file not found"
 fi
 
+# --- Build Slack payload ---
+# Build fields array conditionally
+FIELDS_ARRAY="[]"
+if [[ -n "$REVISION_KEY" ]]; then
+  if [[ "$FIELDS_ARRAY" == "[]" ]]; then
+    FIELDS_ARRAY=$(jq -n --arg revision_key "$REVISION_KEY" '[{title: "Revision Key", value: $revision_key, short: true}]')
+  else
+    FIELDS_ARRAY=$(jq -n --argjson existing "$FIELDS_ARRAY" --arg revision_key "$REVISION_KEY" '$existing + [{title: "Revision Key", value: $revision_key, short: true}]')
+  fi
+fi
+
+
 PAYLOAD=$(jq -n \
   --arg color "$COLOR" \
   --arg title "$JOB_NAME: $STATUS" \
   --arg text "$SUMMARY_TEXT" \
+  --argjson fields "$FIELDS_ARRAY" \
   --arg url "$CI_URL" \
   --argjson ts "$(date +%s)" \
   '{
