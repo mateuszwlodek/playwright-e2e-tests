@@ -22,6 +22,9 @@ else
   BRANCH="unknown"
 fi
 
+# Extract revision key from environment variable
+REVISION_KEY="${REVISION_KEY:-}"
+
 # --- Check dependencies ---
 if ! command -v jq &> /dev/null; then
   echo "❌ jq is required but not installed."
@@ -80,7 +83,11 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   TEST_FILES=$(jq -r '.suites[].specs[].file | split("/") | .[-1]' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | sort -u | head -10 | tr '\n' ', ' | sed 's/, $//')
   
   # Build summary text with proper formatting
-  SUMMARY_TEXT="*Branch:* \`$BRANCH\`"$'\n'"*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED | Skipped: $SKIPPED"
+  SUMMARY_TEXT="*Branch:* \`$BRANCH\`"
+  if [[ -n "$REVISION_KEY" ]]; then
+    SUMMARY_TEXT="$SUMMARY_TEXT"$'\n'"*Revision Key:* \`$REVISION_KEY\`"
+  fi
+  SUMMARY_TEXT="$SUMMARY_TEXT"$'\n'"*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED | Skipped: $SKIPPED"
   
   # Add failed tests if any
   if [[ -n "$FAILED_TESTS" ]]; then
@@ -101,11 +108,21 @@ else
 fi
 
 # --- Build Slack payload ---
+# Build fields array conditionally
+FIELDS_ARRAY="[]"
+if [[ -n "$REVISION_KEY" ]]; then
+  if [[ "$FIELDS_ARRAY" == "[]" ]]; then
+    FIELDS_ARRAY=$(jq -n --arg revision_key "$REVISION_KEY" '[{title: "Revision Key", value: $revision_key, short: true}]')
+  else
+    FIELDS_ARRAY=$(jq -n --argjson existing "$FIELDS_ARRAY" --arg revision_key "$REVISION_KEY" '$existing + [{title: "Revision Key", value: $revision_key, short: true}]')
+  fi
+fi
+
 PAYLOAD=$(jq -n \
   --arg color "$COLOR" \
   --arg title "$JOB_NAME: $STATUS" \
   --arg text "$SUMMARY_TEXT" \
-  --arg branch "$BRANCH" \
+  --argjson fields "$FIELDS_ARRAY" \
   --arg url "$CI_URL" \
   --argjson ts "$(date +%s)" \
   '{
@@ -114,7 +131,7 @@ PAYLOAD=$(jq -n \
       title: $title,
       text: $text,
       mrkdwn_in: ["text"],
-      fields: (if $branch != "unknown" then [{title: "Branch", value: $branch, short: true}] else [] end),
+      fields: $fields,
       footer: "Playwright E2E",
       footer_icon: "https://playwright.dev/img/playwright-logo.svg",
       actions: (if $url != "" then [{type: "button", text: "View CI Run", url: $url}] else [] end),
