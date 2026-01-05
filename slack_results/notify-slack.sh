@@ -44,6 +44,7 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   TOTAL=$(jq '[.suites[].specs[].tests[]] | length' "$PLAYWRIGHT_RESULTS_FILE")
   PASSED=$(jq '[.suites[].specs[].tests[] | select(.status == "expected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   FAILED=$(jq '[.suites[].specs[].tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  SKIPPED=$(jq '[.suites[].specs[].tests[] | select(.status == "skipped")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   
   # Extract failed test details
   FAILED_TESTS=$(jq -r '
@@ -53,25 +54,35 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
     "• \(.title) (\(.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
+  # Extract skipped test details
+  SKIPPED_TESTS=$(jq -r '
+    .suites[] | 
+    .specs[] | 
+    select(.tests[0].status == "skipped") | 
+    "• \(.title) (\(.file | split("/") | .[-1]))"
+  ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
+  
   # Extract test file names (unique, sorted)
   TEST_FILES=$(jq -r '.suites[].specs[].file | split("/") | .[-1]' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | sort -u | head -10 | tr '\n' ', ' | sed 's/, $//')
   
   # Build summary text with proper formatting
-  SUMMARY_TEXT="*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED"
+  SUMMARY_TEXT="*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED | Skipped: $SKIPPED"
   
   # Add failed tests if any
   if [[ -n "$FAILED_TESTS" ]]; then
     SUMMARY_TEXT="$SUMMARY_TEXT"$'\n\n'"*Failed Tests:*"$'\n'"$FAILED_TESTS"
   fi
   
-  # Add test files if available
-  if [[ -n "$TEST_FILES" ]]; then
-    SUMMARY_TEXT="$SUMMARY_TEXT"$'\n\n'"*Test Files:* $TEST_FILES"
+  # Add skipped tests if any
+  if [[ -n "$SKIPPED_TESTS" ]]; then
+    SUMMARY_TEXT="$SUMMARY_TEXT"$'\n\n'"*Skipped Tests:*"$'\n'"$SKIPPED_TESTS"
   fi
+  
 else
   TOTAL="N/A"
   PASSED="N/A"
   FAILED="N/A"
+  SKIPPED="N/A"
   SUMMARY_TEXT="Test results file not found"
 fi
 
