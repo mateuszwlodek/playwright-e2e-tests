@@ -119,7 +119,6 @@ PAYLOAD=$(jq -n \
       title: $title,
       text: $text,
       mrkdwn_in: ["text"],
-      fields: $fields,
       footer: "Playwright E2E",
       footer_icon: "https://playwright.dev/img/playwright-logo.svg",
       actions: (if $url != "" then [{type: "button", text: "View CI Run", url: $url}] else [] end),
