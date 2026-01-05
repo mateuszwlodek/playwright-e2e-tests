@@ -8,6 +8,20 @@ JOB_NAME="${GITHUB_WORKFLOW:-${JOB_NAME:-Playwright E2E Tests}}"
 CI_URL="${CI_URL:-}"
 PLAYWRIGHT_RESULTS_FILE="playwright-report/json/test-results.json"
 
+# Extract branch name from GitHub Actions or git
+if [[ -n "$GITHUB_HEAD_REF" ]]; then
+  BRANCH="$GITHUB_HEAD_REF"
+elif [[ -n "$GITHUB_REF_NAME" ]]; then
+  BRANCH="$GITHUB_REF_NAME"
+elif [[ -n "$GITHUB_REF" ]]; then
+  BRANCH="${GITHUB_REF#refs/heads/}"
+  BRANCH="${BRANCH#refs/tags/}"
+elif command -v git &> /dev/null && git rev-parse --git-dir &> /dev/null; then
+  BRANCH=$(git branch --show-current 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+else
+  BRANCH="unknown"
+fi
+
 # --- Check dependencies ---
 if ! command -v jq &> /dev/null; then
   echo "❌ jq is required but not installed."
@@ -66,7 +80,7 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   TEST_FILES=$(jq -r '.suites[].specs[].file | split("/") | .[-1]' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | sort -u | head -10 | tr '\n' ', ' | sed 's/, $//')
   
   # Build summary text with proper formatting
-  SUMMARY_TEXT="*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED | Skipped: $SKIPPED"
+  SUMMARY_TEXT="*Branch:* \`$BRANCH\`"$'\n'"*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED | Skipped: $SKIPPED"
   
   # Add failed tests if any
   if [[ -n "$FAILED_TESTS" ]]; then
@@ -91,6 +105,7 @@ PAYLOAD=$(jq -n \
   --arg color "$COLOR" \
   --arg title "$JOB_NAME: $STATUS" \
   --arg text "$SUMMARY_TEXT" \
+  --arg branch "$BRANCH" \
   --arg url "$CI_URL" \
   --argjson ts "$(date +%s)" \
   '{
@@ -99,6 +114,7 @@ PAYLOAD=$(jq -n \
       title: $title,
       text: $text,
       mrkdwn_in: ["text"],
+      fields: (if $branch != "unknown" then [{title: "Branch", value: $branch, short: true}] else [] end),
       footer: "Playwright E2E",
       footer_icon: "https://playwright.dev/img/playwright-logo.svg",
       actions: (if $url != "" then [{type: "button", text: "View CI Run", url: $url}] else [] end),
