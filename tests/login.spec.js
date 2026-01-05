@@ -15,7 +15,7 @@ test("Check login. @login", async ({ page }) => {
   await page.locator(loginLocators.passwordInput).fill(staffPassword);
   await page.locator(loginLocators.signInButton).click();
   await expect(page).toHaveURL(
-    "a/" + testData.IRELAND_SALON.ACCOUNT_ID + "/appiontments"
+    "a/" + testData.IRELAND_SALON.ACCOUNT_ID + "/appointments"
   );
 });
 

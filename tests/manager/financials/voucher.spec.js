@@ -47,7 +47,7 @@ const createVoucherData = () => {
 };
 
 // Test implementation
-test.skip("Create new voucher with GraphQL @voucher", async ({ page, request }) => {
+test("Create new voucher with GraphQL @voucher", async ({ page, request }) => {
   // Setup
   await generalCommands.loginByPass(page, request, TEST_CONFIG.staffEmail, TEST_CONFIG.staffPassword);
   await generalCommands.loadFeatureFlags(page);
