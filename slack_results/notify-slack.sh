@@ -19,14 +19,21 @@ if [[ -z "$SLACK_WEBHOOK_URL" ]]; then
   exit 1
 fi
 
-# --- Determine result ---
-if [[ "$1" == "success" ]]; then
-  STATUS="✅ SUCCESS"
-  COLOR="#2eb886"
-elif [[ "$1" == "failure" ]]; then
-  STATUS="❌ FAILURE"
-  COLOR="#cc0000"
+# --- Determine result based on test run results ---
+if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
+  # Count failed tests
+  FAILED_COUNT=$(jq '[.suites[].specs[].tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null || echo "0")
+  
+  # Determine status: if any test failed, it's a failure; otherwise success
+  if [[ "$FAILED_COUNT" -gt 0 ]]; then
+    STATUS="❌ FAILURE"
+    COLOR="#cc0000"
+  else
+    STATUS="✅ SUCCESS"
+    COLOR="#2eb886"
+  fi
 else
+  # If results file doesn't exist, mark as unknown
   STATUS="⚪️ UNKNOWN"
   COLOR="#aaaaaa"
 fi
