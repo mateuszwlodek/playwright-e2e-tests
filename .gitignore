@@ -9,6 +9,7 @@ node_modules/
 # Playwright
 /test-results/
 /playwright-report/
+/playwright-results/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
