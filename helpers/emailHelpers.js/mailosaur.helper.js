@@ -1,5 +1,4 @@
 import MailosaurClient from 'mailosaur';
-//const MailosaurClient = require('mailosaur');
 
 const mailosaur = new MailosaurClient(process.env.MAILOSAUR_API_KEY);
 const SERVER_ID = process.env.MAILOSAUR_SERVER_ID;
