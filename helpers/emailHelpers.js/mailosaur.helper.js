@@ -3,13 +3,11 @@ import MailosaurClient from 'mailosaur';
 const mailosaur = new MailosaurClient(process.env.MAILOSAUR_API_KEY);
 const SERVER_ID = process.env.MAILOSAUR_SERVER_ID;
 
-/**
- * Wait for email by subject
- */
-export async function returnEmailFromMailosaur(subject, options = {}) {
+//Wait for email by subject
+export async function returnEmailIDFromMailosaur(subject, options = {}) {
   const {
     maxRetries = 8,           // equivalent to wait_time_mins
-    waitTimeMs = 50_000,      // 50 seconds
+    waitTimeMs = 60_000,      // 60 seconds
   } = options;
 
   let counter = 0;
@@ -49,9 +47,9 @@ export async function returnEmailFromMailosaur(subject, options = {}) {
 /**
  * Wait for SMS by unique body text
  */
-async function returnSmsFromMailosaur(uniqueName, options = {}) {
+export async function returnSmsIDFromMailosaur(uniqueName, options = {}) {
   const {
-    maxRetries = 9,
+    maxRetries = 8,
     waitTimeMs = 60_000,
   } = options;
 
@@ -87,7 +85,3 @@ async function returnSmsFromMailosaur(uniqueName, options = {}) {
   }
 }
 
-//module.exports = {
- // returnEmailFromMailosaur,
- // returnSmsFromMailosaur,
-//};
