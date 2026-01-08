@@ -60,7 +60,7 @@ class generalCommands {
     //Expand the side navigation bar and open embedded FF page
     await page.locator('button[name="toggle-main-nav-button"]').click(); // To be replaced with proper locator
     await page.getByRole('link', { name: '(Embedded)' }).click(); // To be replaced with proper locator
-    const featureFlagToggle = page.locator('iframe[name="iframe-embed"]').contentFrame().locator('#all-visible-feature-flags'); // To be replaced with proper locator
+    const featureFlagToggle = page.frameLocator('iframe[name="iframe-embed"]').locator('#all-visible-feature-flags'); // To be replaced with proper locator
     // Check if aria-checked attribute is present and action toggle if attribute is missing
     const ariaChecked = await featureFlagToggle.getAttribute('aria-checked');
       if (ariaChecked === null) {
