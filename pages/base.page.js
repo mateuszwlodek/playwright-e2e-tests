@@ -82,7 +82,7 @@ class BasePage {
       await element.click();
       
       // Clear existing content
-      await this.page.keyboard.press('Control+A');    // Keyboard shortcut to clear content on the input fields, if any
+      await this.page.keyboard.press('Meta+A');    // Keyboard shortcut to clear content on the input fields, if any
       await this.page.keyboard.press('Backspace');
       
       // Type new content
@@ -100,7 +100,7 @@ class BasePage {
       const element = frame.locator(selector);
       await element.waitFor({ state: 'visible' });
       await element.click();
-      await this.page.keyboard.press('Control+A');
+      await this.page.keyboard.press('Meta+A');
       await this.page.keyboard.press('Backspace');
       await element.pressSequentially(value, { delay });
     }
