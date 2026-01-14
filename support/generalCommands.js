@@ -38,8 +38,7 @@ class GeneralCommands {
     if (!revisionKey) {
       await page.goto("/");
     } else {
-      //await page.goto(Salon.BASE_URL + "/?revision=" + revisionKey);
-      await page.goto(testData.BASE_URL + "/?revision=" + revisionKey);
+      await page.goto(testData.URL.BASE_URL + "/?revision=" + revisionKey);
     }
   }
 

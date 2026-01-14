@@ -97,15 +97,17 @@ class MarketingPage extends BasePage {
   //Wait for modal to appear on main page
   await this.page.waitForTimeout(3000);
       
-  //The input is on the MAIN PAGE with name="campaign-name" and placeholder="New Campaign"
-    const modalInput = this.page.locator('input[name="campaign-name"]');
-    await this.page.keyboard.type(campaignName);
+  //The input is in iframe with name = "campaign-name"
+    const modalInput = frame.locator('input[name="campaign-name"]');
+    await modalInput.waitFor({ state: 'visible', timeout: 10000 });
+    await modalInput.fill(campaignName);
+    
   //Save the modal after renaming the campaign
     const saveButton = frame.locator('button[name="save"]');
     await saveButton.waitFor({ state: 'visible', timeout: 10000 });
     await saveButton.click();
   // Wait for modal to close
-      await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(2000);
 }
     
   // Set subject of the email campaign
