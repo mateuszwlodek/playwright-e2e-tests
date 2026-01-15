@@ -1,12 +1,12 @@
 import { expect } from "@playwright/test";
-import { testData } from "../testData/salonData.js";
+import { testSalonData } from "../testData/salonData.js";
 import fs from "fs";
 import path from "path";
 
 class generalCommands {
   // Login
-  async loginByPass(page, request, staffEmail, staffPassword) {
-    const response = await request.post(testData.URL.TOKEN_URL, {
+  async loginByPassDev(page, request, staffEmail, staffPassword) {
+    const response = await request.post(testSalonData.DEV.URL.TOKEN_URL, {
       data: {
         grant_type: "basic",
         client_type: "user",
@@ -20,8 +20,36 @@ class generalCommands {
     let tokenValue = responseJSON.access_token;
 
     // Navigate to the page first to establish a proper context
-    await page.goto("/");
+    await page.goto(testSalonData.DEV.URL.BASE_URL);
+  
+    // Wait for the page to be ready
+    await page.waitForLoadState("domcontentloaded");
 
+    // Set localStorage in the page context
+    await page.evaluate((token) => {
+      localStorage.setItem("access-token", token);
+    }, tokenValue);
+
+    await this.checkRevisionKey(page);
+  }
+
+  async loginByPassProd(page, request, staffEmail, staffPassword) {
+    const response = await request.post(testSalonData.PROD.URL.TOKEN_URL, {
+      data: {
+        grant_type: "basic",
+        client_type: "user",
+        username: staffEmail,
+        password: staffPassword,
+      },
+    });
+    await expect(response.ok()).toBeTruthy();
+    await expect(response.status()).toBe(200);
+    let responseJSON = await response.json();
+    let tokenValue = responseJSON.access_token;
+
+    // Navigate to the page first to establish a proper context
+    await page.goto(testSalonData.PROD.URL.BASE_URL);
+  
     // Wait for the page to be ready
     await page.waitForLoadState("domcontentloaded");
 
@@ -59,21 +87,24 @@ class generalCommands {
   async enableEmbeddedFlags(page) {
     //Expand the side navigation bar and open embedded FF page
     await page.locator('button[name="toggle-main-nav-button"]').click(); // To be replaced with proper locator
-    await page.getByRole('link', { name: '(Embedded)' }).click(); // To be replaced with proper locator
-    const featureFlagToggle = page.frameLocator('iframe[name="iframe-embed"]').locator('#all-visible-feature-flags'); // To be replaced with proper locator
+    await page.getByRole("link", { name: "(Embedded)" }).click(); // To be replaced with proper locator
+    const featureFlagToggle = page
+      .frameLocator('iframe[name="iframe-embed"]')
+      .locator("#all-visible-feature-flags"); // To be replaced with proper locator
     // Check if aria-checked attribute is present and action toggle if attribute is missing
-    const ariaChecked = await featureFlagToggle.getAttribute('aria-checked');
-      if (ariaChecked === null) {
-        console.log('🚩 Feature flags not all enabled, turning on...');
-        await featureFlagToggle.click();
+    const ariaChecked = await featureFlagToggle.getAttribute("aria-checked");
+    if (ariaChecked === null) {
+      console.log("🚩 Feature flags not all enabled, turning on...");
+      await featureFlagToggle.click();
     } else {
-      console.log('✅ Feature flags are already on, skipping...');
+      console.log("✅ Feature flags are already on, skipping...");
     }
   }
 
   async getAccessToken(page) {
     return await page.evaluate(() => localStorage.getItem("access-token"));
   }
+
 }
 
 module.exports = new generalCommands();

@@ -1,4 +1,4 @@
-import { testData } from "../../testData/salonData.js";
+import { testSalonData } from "../../testData/salonData.js";
 import { voucher } from "../graphQL/queries/voucher.query.js";
 
 /**
@@ -15,7 +15,7 @@ class VoucherRequests {
   async createVoucher(request, token, voucherData) {
     const securityContext = this._buildSecurityContext();
     
-    return await request.post(testData.URL.GRAPHQL_URL, {
+    return await request.post(testSalonData.DEV.URL.GRAPHQL_URL, {
       headers: {
         authorization: `Bearer ${token}`,
         "x-memento-security-context": securityContext,
@@ -34,11 +34,11 @@ class VoucherRequests {
    */
   _buildSecurityContext() {
     return (
-      testData.IRELAND_SALON.BUSINESS_ID +
+      testSalonData.DEV.EU.SINGLE_BRANCH.IRELAND_SALON.BUSINESS_ID +
       "|" +
-      testData.IRELAND_SALON.BRANCH_ID +
+      testSalonData.DEV.EU.SINGLE_BRANCH.IRELAND_SALON.BRANCH_ID +
       "|" +
-      testData.IRELAND_SALON.staff[0].id
+      testSalonData.DEV.EU.SINGLE_BRANCH.IRELAND_SALON.staff[0].id
     );
   }
 }
