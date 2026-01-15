@@ -1,4 +1,4 @@
-name: Manual regression run
+name: Manual regression run - Experimental
 on:
   workflow_dispatch:
     inputs:
@@ -67,7 +67,7 @@ jobs:
         retention-days: 10
 
   testProd:
-    name: 🧪 E2E Tests - DEV
+    name: 🧪 E2E Tests - PROD
     timeout-minutes: 60
     needs: cleanup-appointments
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install chromium --with-deps
     - name: Run Playwright tests
-      run: npx playwright test @dev
+      run: npx playwright test @prod
       continue-on-error: true
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
