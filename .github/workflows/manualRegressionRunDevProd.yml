@@ -94,7 +94,7 @@ jobs:
 
   notify-slack:
     timeout-minutes: 60
-    needs: [testDev,testProd]
+    needs: [testDev, testProd]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
