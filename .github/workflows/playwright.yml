@@ -4,13 +4,19 @@ on:
     branches: [ main, master ]
 
 env:
-  apiUsername: ${{ secrets.apiUsername }}
-  apiPassword: ${{ secrets.apiPassword }}
-  staffPassword: ${{ secrets.staffPassword }}
+# General environmental variables
   MAILOSAURAPIKEY: ${{ secrets.MAILOSAURAPIKEY }}
   UK_STRIPE_KEY: ${{ secrets.UK_STRIPE_KEY }}
   IE_STRIPE_KEY: ${{ secrets.IE_STRIPE_KEY }}
-
+# DEV environmental variables
+  DEV_apiUsername: ${{ secrets.DEV_APIUSERNAME }}
+  DEV_apiPassword: ${{ secrets.DEV_APIPASSWORD }}
+  DEV_staffPassword: ${{ secrets.DEV_STAFFPASSWORD }}
+# PROD environmental variables
+  apiUsePROD_apiUsernamername: ${{ secrets.PROD_apiUsername }}
+  PROD_apiPassword: ${{ secrets.PROD_APIPASSWORD }}
+  PROD_staffPassword: ${{ secrets.PROD_STAFFPASSWORD }}
+  
 jobs:
   cleanup-appointments:
     name: 🧹 Cleanup Appointments
