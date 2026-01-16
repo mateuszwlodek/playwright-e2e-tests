@@ -19,7 +19,7 @@ test.describe('Marketing', () => {
     const emailBody = 'Hi Mailosaur, this is an automated email ';
 
     //Login Details
-    await generalCommands.loginByPassProd(page, request, staffEmailDev, staffPasswordDev);
+    await generalCommands.loginByPassDev(page, request, staffEmailDev, staffPasswordDev);
 
     //Create a Marketing Page Object
     const marketingPage = new MarketingPage(page);
