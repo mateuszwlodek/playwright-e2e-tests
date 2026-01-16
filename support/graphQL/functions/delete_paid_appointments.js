@@ -82,5 +82,4 @@ async function deletePaidAppointments (file) {
       console.log(error)
     })
 }
-
-module.exports = { deletePaidAppointments }
+export default deletePaidAppointments;

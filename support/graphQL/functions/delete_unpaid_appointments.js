@@ -36,5 +36,4 @@ async function deleteUnpaidAppointments (file) {
     })
   }
 }
-
-module.exports = { deleteUnpaidAppointments }
+export default deleteUnpaidAppointments;
