@@ -11,15 +11,15 @@ test.describe('Marketing', () => {
   test('Validate that user can create & send an email campaign to Mailosaur', async ({ page, request }) => {
     test.setTimeout(240000);
     //Test Data
-    const staffEmailProd = testSalonData.PROD.EU.SINGLE_BRANCH.MARKETING.staff[0].email;
-    const staffPasswordProd = process.env.PROD_staffPassword;
+    const staffEmailDev = testSalonData.DEV.EU.SINGLE_BRANCH.IRELAND_SALON.staff[0].email;
+    const staffPasswordDev = process.env.DEV_staffPassword;
     const unique = Date.now().toString();
     const subject = `${faker.lorem.word()}${faker.person.firstName()}`;
     const campaignName = `MailosaurEmail${unique}`;
     const emailBody = 'Hi Mailosaur, this is an automated email ';
 
     //Login Details
-    await generalCommands.loginByPassProd(page, request, staffEmailProd, staffPasswordProd);
+    await generalCommands.loginByPassProd(page, request, staffEmailDev, staffPasswordDev);
 
     //Create a Marketing Page Object
     const marketingPage = new MarketingPage(page);
