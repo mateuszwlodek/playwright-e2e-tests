@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Marketing', () => {
 
   // Validate that user can submit lead form on OB      
-  test('Validate that a lead can submit the form on OB', async ({ page }) => {
+  test('Validate that a lead can submit the form on OB @dev @marketing', async ({ page }) => {
     const unique = (new Date().getTime()) + '';
     const LeadFirstName = 'Lead' + unique; 
     const LeadLastName = 'Surname' + unique; 

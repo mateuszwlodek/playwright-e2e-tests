@@ -44,17 +44,16 @@ jobs:
       run: npx playwright install chromium --with-deps
     - name: Run Playwright tests
       run: npx playwright test
-      continue-on-error: true
     - name: Make notify-slack.sh executable
       run: chmod +x ./slack_results/notify-slack.sh
     - name: Notify Slack
-      if: ${{ !cancelled() }}
+      if: always() && !cancelled()
       run: ./slack_results/notify-slack.sh
       env:
          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
          CI_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+      if: always() && !cancelled()
       with:
         name: playwright-report
         path: playwright-report/

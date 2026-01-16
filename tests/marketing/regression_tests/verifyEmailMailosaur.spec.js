@@ -4,21 +4,22 @@ import generalCommands from "../../../support/generalCommands.js";
 import { faker } from '@faker-js/faker';
 import { returnEmailIDFromMailosaur } from '../../../helpers/emailHelpers.js/mailosaur.helper.js';
 import MarketingPage from '../../../pages/marketing.page.js';
+import { testSalonData } from "../../../testData/salonData.js";
 
 test.describe('Marketing', () => {
 
   test('Validate that user can create & send an email campaign to Mailosaur', async ({ page, request }) => {
     test.setTimeout(240000);
     //Test Data
-    const staffEmail = process.env.staffEmail;
-    const staffPassword = process.env.staffPassword;
+    const staffEmailProd = testSalonData.PROD.EU.SINGLE_BRANCH.MARKETING.staff[0].email;
+    const staffPasswordProd = process.env.PROD_staffPassword;
     const unique = Date.now().toString();
     const subject = `${faker.lorem.word()}${faker.person.firstName()}`;
     const campaignName = `MailosaurEmail${unique}`;
     const emailBody = 'Hi Mailosaur, this is an automated email ';
 
     //Login Details
-    await generalCommands.loginByPass(page, request, staffEmail, staffPassword);
+    await generalCommands.loginByPassProd(page, request, staffEmailProd, staffPasswordProd);
 
     //Create a Marketing Page Object
     const marketingPage = new MarketingPage(page);
