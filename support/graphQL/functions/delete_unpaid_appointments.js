@@ -1,9 +1,9 @@
-const { getToken } = require('../requests/get_token.request')
-const { getUserID } = require('../requests/get_user_id.request')
-const { getStaffAppointments } = require('../requests/get_staff_appointments.request')
-const { deleteAppointment } = require('../requests/delete_appointment.request')
-
-const moment = require('moment')
+// Import ES module functions
+import getToken from '../requests/get_token.request.js';
+import getUserID from '../requests/get_user_id.request.js';
+import getStaffAppointments from '../requests/get_staff_appointments.request.js';
+import deleteAppointment from '../requests/delete_appointment.request.js';
+import moment from 'moment';
 
 async function deleteUnpaidAppointments (file) {
   const token = await getToken(file)
@@ -36,5 +36,4 @@ async function deleteUnpaidAppointments (file) {
     })
   }
 }
-
-module.exports = { deleteUnpaidAppointments }
+export default deleteUnpaidAppointments;

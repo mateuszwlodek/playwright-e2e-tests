@@ -1,5 +1,11 @@
-const axios = require('axios')
-const xml2js = require('xml2js')
+import axios from 'axios';
+import xml2js from 'xml2js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function trimPurchaseID (id) {
   const res = id.replace('urn:x-memento:Purchase:', '')
@@ -45,7 +51,8 @@ const startDate = yesterday(new Date(new Date().setUTCHours(0, 0, 0, 0))).toISOS
 const endDate = addWeeks(2, new Date(new Date().setUTCHours(0, 0, 0, 0))).toISOString()
 
 async function deletePaidAppointments (file) {
-  const config = require(`../../config/${file}.json`)
+  const configPath = path.join(__dirname, `../../config/${file}.json`);
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const apiUrl = config.env.apiUrl
   const businessID = config.env.businessID
   const branchID = config.env.branchID
@@ -82,5 +89,4 @@ async function deletePaidAppointments (file) {
       console.log(error)
     })
 }
-
-module.exports = { deletePaidAppointments }
+export default deletePaidAppointments;

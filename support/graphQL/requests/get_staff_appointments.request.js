@@ -1,6 +1,14 @@
-const fetch = require('node-fetch')
-const myHeaders = new fetch.Headers()
-const { staff } = require('../queries/staff.query')
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import staffModule from '../queries/staff.query.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const myHeaders = new fetch.Headers();
+const { staff } = staffModule;
 
 /*
  * This function not added to the Cypress custom commands as is used in
@@ -9,7 +17,8 @@ const { staff } = require('../queries/staff.query')
  * This means that we always use live data and makes tests more robust
  */
 async function getStaffAppointments (file, userID, token, date) {
-  const config = require(`../../config/${file}.json`)
+  const configPath = path.join(__dirname, `../../config/${file}.json`);
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const graphQLUrl = config.env.graphQLUrl
   const businessID = config.env.businessID
   const branchID = config.env.branchID
@@ -50,4 +59,4 @@ async function getStaffAppointments (file, userID, token, date) {
       return json.data.staffCalendar
     })
 }
-module.exports = { getStaffAppointments }
+export default getStaffAppointments;

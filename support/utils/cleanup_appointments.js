@@ -3,13 +3,9 @@
 // -----------------------------------
 
 // Import necessary GraphQL cleanup functions
-const {
-  deleteUnpaidAppointments,
-} = require("../graphQL/functions/delete_unpaid_appointments");
-const {
-  deletePaidAppointments,
-} = require("../graphQL/functions/delete_paid_appointments");
-const { deleteBreaks } = require("../graphQL/functions/delete_breaks");
+import deleteBreaks from "../graphQL/functions/delete_breaks.js";
+import deleteUnpaidAppointments from "../graphQL/functions/delete_unpaid_appointments.js";
+import deletePaidAppointments from "../graphQL/functions/delete_paid_appointments.js";
 
 // Get environment from command line argument
 const env = process.argv[2];

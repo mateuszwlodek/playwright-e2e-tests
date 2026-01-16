@@ -3,7 +3,7 @@ import { testSalonData } from "../testData/salonData.js";
 import fs from "fs";
 import path from "path";
 
-class generalCommands {
+class GeneralCommands {
   // Login
   async loginByPassDev(page, request, staffEmail, staffPassword) {
     const response = await request.post(testSalonData.DEV.URL.TOKEN_URL, {
@@ -72,7 +72,8 @@ class generalCommands {
 
   async loadFeatureFlags(page) {
     // Read the fixture file
-    const fixturePath = path.join(__dirname, "../fixtures/feature_flags.json");
+    //const fixturePath = path.join(__dirname, "../fixtures/feature_flags.json");
+    const fixturePath = path.join(process.cwd(), "fixtures/feature_flags.json");
     const featureFlags = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
 
     // Turn on each feature flag
@@ -107,4 +108,5 @@ class generalCommands {
 
 }
 
-module.exports = new generalCommands();
+//module.exports = new generalCommands();
+export default new GeneralCommands();

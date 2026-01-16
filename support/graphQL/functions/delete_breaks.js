@@ -1,9 +1,9 @@
-const { getToken } = require('../requests/get_token.request')
-const { getUserID } = require('../requests/get_user_id.request')
-const { getStaffAppointments } = require('../requests/get_staff_appointments.request')
-const { deleteBreak } = require('../requests/delete_break.request')
-
-const moment = require('moment')
+// Import ES module functions
+import getToken from '../requests/get_token.request.js';
+import getUserID from '../requests/get_user_id.request.js';
+import getStaffAppointments from '../requests/get_staff_appointments.request.js';
+import deleteBreak from '../requests/delete_break.request.js';
+import moment from 'moment';
 
 async function deleteBreaks (file) {
   const token = await getToken(file)
@@ -34,4 +34,4 @@ async function deleteBreaks (file) {
   }
 }
 
-module.exports = { deleteBreaks }
+export default deleteBreaks;
