@@ -240,6 +240,18 @@ export const testSalonData = {
             },
           ],
         },
+        MARKETING: {
+          ACCOUNT_ID: 13824,
+          BUSINESS_ID: "oswrE8tgzZFfXC_2CweXBw",
+          BRANCH_ID: "sSf9WDHxNnXJSOVQ66E0Fw",
+          staff: [
+            {
+              name: "Qa marketing",
+              email: "qamarketing@phorest.com",
+              id: "XFHFWvS2nurKm7yQUSc_MQ",
+            },
+          ],
+        },
       },
       MULTI_BRANCH: {},
     },
