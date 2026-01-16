@@ -3,7 +3,7 @@ import { testData } from "../testData/salonData.js";
 import fs from "fs";
 import path from "path";
 
-class generalCommands {
+class GeneralCommands {
   // Login
   async loginByPass(page, request, staffEmail, staffPassword) {
     const response = await request.post(testData.URL.TOKEN_URL, {
@@ -38,13 +38,14 @@ class generalCommands {
     if (!revisionKey) {
       await page.goto("/");
     } else {
-      await page.goto(Salon.BASE_URL + "/?revision=" + revisionKey);
+      await page.goto(testData.URL.BASE_URL + "/?revision=" + revisionKey);
     }
   }
 
   async loadFeatureFlags(page) {
     // Read the fixture file
-    const fixturePath = path.join(__dirname, "../fixtures/feature_flags.json");
+    //const fixturePath = path.join(__dirname, "../fixtures/feature_flags.json");
+    const fixturePath = path.join(process.cwd(), "fixtures/feature_flags.json");
     const featureFlags = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
 
     // Turn on each feature flag
@@ -76,4 +77,5 @@ class generalCommands {
   }
 }
 
-module.exports = new generalCommands();
+//module.exports = new generalCommands();
+export default new GeneralCommands();

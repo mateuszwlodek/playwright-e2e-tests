@@ -193,4 +193,4 @@ fragment breakFields on Break {
   __typename
 }`
 }
-module.exports = { staff }
+export default staff;

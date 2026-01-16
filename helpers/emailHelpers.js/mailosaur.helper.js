@@ -1,6 +1,6 @@
 import MailosaurClient from 'mailosaur';
 
-const mailosaur = new MailosaurClient(process.env.MAILOSAUR_API_KEY);
+const mailosaur = new MailosaurClient(process.env.MAILOSAURAPIKEY);
 const SERVER_ID = process.env.MAILOSAUR_SERVER_ID;
 
 //Wait for email by subject

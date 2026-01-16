@@ -1,10 +1,18 @@
-const { appointments } = require('../queries/appointments.query')
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import appointmentsModule from '../queries/appointments.query.js';
 
-const fetch = require('node-fetch')
-const myHeaders = new fetch.Headers()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const myHeaders = new fetch.Headers();
+const { appointments } = appointmentsModule;
 
 async function deleteAppointment (file, token, userID, appointmentId) {
-  const config = require(`../../config/${file}.json`)
+  const configPath = path.join(__dirname, `../../config/${file}.json`);
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const graphQLUrl = config.env.graphQLUrl
   const businessID = config.env.businessID
   const branchID = config.env.branchID
@@ -44,4 +52,4 @@ async function deleteAppointment (file, token, userID, appointmentId) {
       return console.log(json.data)
     })
 }
-module.exports = { deleteAppointment }
+export default deleteAppointment;

@@ -1,10 +1,18 @@
-const { breaks } = require('../queries/breaks.query')
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import breaksModule from '../queries/breaks.query.js';
 
-const fetch = require('node-fetch')
-const myHeaders = new fetch.Headers()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const myHeaders = new fetch.Headers();
+const { breaks } = breaksModule;
 
 async function deleteBreak (file, token, userID, breakId) {
-  const config = require(`../../config/${file}.json`)
+  const configPath = path.join(__dirname, `../../config/${file}.json`);
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const graphQLUrl = config.env.graphQLUrl
   const businessID = config.env.businessID
   const branchID = config.env.branchID
@@ -41,4 +49,5 @@ async function deleteBreak (file, token, userID, breakId) {
       return console.log(json.data)
     })
 }
-module.exports = { deleteBreak }
+
+export default deleteBreak;

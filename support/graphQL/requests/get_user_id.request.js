@@ -1,9 +1,18 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import userModule from "../queries/user.query.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const myHeaders = new fetch.Headers();
-const { user } = require("../queries/user.query");
+const { user } = userModule;
 
 async function getUserID(file, token) {
-  const config = require(`../../config/${file}.json`);
+  const configPath = path.join(__dirname, `../../config/${file}.json`);
+  const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
   const graphQLUrl = config.env.graphQLUrl;
   const businessID = config.env.businessID;
   const branchID = config.env.branchID;
@@ -41,4 +50,4 @@ async function getUserID(file, token) {
     });
 }
 
-module.exports = { getUserID };
+export default getUserID;
