@@ -1,5 +1,5 @@
 import { testSalonData } from "../../testData/salonData.js";
-import { voucher } from "../graphQL/queries/voucher.query.js";
+import voucher from "../graphQL/queries/voucher.query.js";
 
 /**
  * Voucher API request functions
