@@ -100,4 +100,4 @@ const user = {
     __typename
   }`
 }
-module.exports = { user }
+export default user;

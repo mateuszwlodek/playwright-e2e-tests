@@ -44,4 +44,4 @@ fragment moneyFields on Money {
   __typename
 }`,
 };
-module.exports = { voucher };
+export default voucher;

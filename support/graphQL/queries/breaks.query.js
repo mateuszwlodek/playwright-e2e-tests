@@ -3,4 +3,4 @@ const breaks = {
     deleteBreak(breakId: $breakId)
   }`
 }
-module.exports = { breaks }
+export default breaks;
