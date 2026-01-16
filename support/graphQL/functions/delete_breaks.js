@@ -1,9 +1,14 @@
-const { getToken } = require('../requests/get_token.request')
-const { getUserID } = require('../requests/get_user_id.request')
-const { getStaffAppointments } = require('../requests/get_staff_appointments.request')
-const { deleteBreak } = require('../requests/delete_break.request')
+// Import CommonJS modules as default and destructure
+import getTokenModule from '../requests/get_token.request.js';
+import getUserIDModule from '../requests/get_user_id.request.js';
+import getStaffAppointmentsModule from '../requests/get_staff_appointments.request.js';
+import deleteBreakModule from '../requests/delete_break.request.js';
+import moment from 'moment';
 
-const moment = require('moment')
+const { getToken } = getTokenModule;
+const { getUserID } = getUserIDModule;
+const { getStaffAppointments } = getStaffAppointmentsModule;
+const { deleteBreak } = deleteBreakModule;
 
 async function deleteBreaks (file) {
   const token = await getToken(file)
@@ -34,4 +39,4 @@ async function deleteBreaks (file) {
   }
 }
 
-module.exports = { deleteBreaks }
+export { deleteBreaks };
