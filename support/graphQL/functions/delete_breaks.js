@@ -1,14 +1,9 @@
-// Import CommonJS modules as default and destructure
-import getTokenModule from '../requests/get_token.request.js';
-import getUserIDModule from '../requests/get_user_id.request.js';
-import getStaffAppointmentsModule from '../requests/get_staff_appointments.request.js';
-import deleteBreakModule from '../requests/delete_break.request.js';
+// Import ES module functions
+import getToken from '../requests/get_token.request.js';
+import getUserID from '../requests/get_user_id.request.js';
+import getStaffAppointments from '../requests/get_staff_appointments.request.js';
+import deleteBreak from '../requests/delete_break.request.js';
 import moment from 'moment';
-
-const { getToken } = getTokenModule;
-const { getUserID } = getUserIDModule;
-const { getStaffAppointments } = getStaffAppointmentsModule;
-const { deleteBreak } = deleteBreakModule;
 
 async function deleteBreaks (file) {
   const token = await getToken(file)
