@@ -39,4 +39,4 @@ async function deleteBreaks (file) {
   }
 }
 
-export { deleteBreaks };
+export default deleteBreaks;
