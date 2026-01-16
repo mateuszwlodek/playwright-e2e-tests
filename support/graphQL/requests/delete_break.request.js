@@ -41,4 +41,5 @@ async function deleteBreak (file, token, userID, breakId) {
       return console.log(json.data)
     })
 }
-module.exports = { deleteBreak }
+
+export default deleteBreak;
