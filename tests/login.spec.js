@@ -6,7 +6,7 @@ import generalCommands from "../support/generalCommands.js";
 
 const staffEmailDev = testSalonData.DEV.EU.SINGLE_BRANCH.IRELAND_SALON.staff[0].email;
 const staffPasswordDev = process.env.DEV_staffPassword;
-const staffEmailProd = testSalonData.PROD.US.MULTI_BRANCH.QA_AUTOMATION_SALON.staff[0].email;
+const staffEmailProd = testSalonData.PROD.US.MULTI_BRANCH.QA_AUTOMATION_SALON.BRANCH_QA_AUTOMATION_DEMO.staff[0].email;
 const staffPasswordProd = process.env.PROD_staffPassword;
 
 test("Check login @dev @login", async ({ page }) => {
@@ -21,7 +21,12 @@ test("Check login @dev @login", async ({ page }) => {
   );
 });
 
-test("Check login @prod @login @smoke", async ({ page, request }) => {
+test("Check login Prod @prod @login @smoke", async ({ page, request }) => {
   await generalCommands.loginByPassProd(page, request, staffEmailProd, staffPasswordProd);
+  await generalCommands.loadFeatureFlags(page);
+});
+
+test("Check login Dev @dev @login @smoke", async ({ page, request }) => {
+  await generalCommands.loginByPassDev(page, request, staffEmailDev, staffPasswordDev);
   await generalCommands.loadFeatureFlags(page);
 });

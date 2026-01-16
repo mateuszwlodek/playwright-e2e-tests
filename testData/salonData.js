@@ -21,6 +21,23 @@ export const testSalonData = {
             },
           ],
         },
+        IRELAND_MATEUSZ_DEMO: {
+          ACCOUNT_ID: 48112,
+          BUSINESS_ID: "okZVIi6pKyOe7LwzTTiWwg",
+          BRANCH_ID: "ooPWjXsoYnvR1X9k7qmkIg",
+          staff: [
+            {
+              name: "Test Owner",
+              email: "mateusz.wlodek+owner@phorest.com",
+              id: "gccIaRlziUExWD-FWye_FQ",
+            },
+            {
+              name: "Test User",
+              email: "testuserMateuszDevSalon@phorest.com",
+              id: "pfXImwbr7ZEtOvRaSYMTZg",
+            },
+          ],
+        },
         IE_TIPPING_SALON: {
           STRIPE_KEY: process.env.IE_STRIPE_KEY,
           ACCOUNT_ID: 47404,
@@ -141,45 +158,134 @@ export const testSalonData = {
     },
     US: {
       SINGLE_BRANCH: {},
-      MULTI_BRANCH: {},
+      MULTI_BRANCH: {
+        US_AUTOMATION_SALON: {
+          BRANCH_BOSTON: {
+            ACCOUNT_ID: 18846,
+            businessID: "FSWCMOBUVf5damNYzfGq6g",
+            branchID: "O1mNsY6iiDDctfaYf1lD-g",
+            staff: [
+              {
+                name: "Cristian Pulisic",
+                email: "pulisic@us.com",
+                id: "nqtBpGfocH-K_Fcga6vS8g",
+              },
+              {
+                name: "Joe Hiden",
+                email: "joe.hiden@us.com",
+                id: "cycZX2OEPBc-XWxFKlCxIw",
+              },
+              {
+                name: "Yourgen Clop",
+                email: "yourgen@us.com",
+                id: "2tLYSaZkXghhlXXv8mVZ8g",
+              },
+            ],
+          },
+          BRANCH_NEW_YORK: {
+            ACCOUNT_ID: 13526,
+            businessID: "FSWCMOBUVf5damNYzfGq6g",
+            branchID: "galO-7FDcAyc3KjcFNuwGQ",
+            staff: [
+              {
+                name: "NewYorker",
+                email: "NewYorker@phorest.com",
+                id: "CcAVgGg-welxY9OOsXEqdg",
+              },
+            ],
+            accessTestUser: [
+              {
+                name: "Access Test",
+                email: "access_test@test.com",
+                id: "TDUS2AgE-VP6chW2Q4TjGA",
+              },
+            ],
+          },
+        },
+      },
     },
   },
   PROD: {
     URL: {
       BASE_URL: "https://my.phorest.com",
-      API_URL: "https://prod-us.phorest.com",
-      API_GATEWAY_URL: "https://api-gateway-us.phorest.com",
-      GRAPHQL_URL: "https://api-gateway-us.phorest.com/api-facade/graphql",
-      TOKEN_URL: "https://api-gateway-us.phorest.com/auth/oauth/token",
+      EU: {
+        API_URL: "https://prod.phorest.com",
+        API_GATEWAY_URL: "https://api-gateway.phorest.com",
+        GRAPHQL_URL: "https://api-gateway.phorest.com/api-facade/graphql",
+        TOKEN_URL: "https://api-gateway.phorest.com/auth/oauth/token",
+      },
+      US: {
+        API_URL: "https://prod-us.phorest.com",
+        API_GATEWAY_URL: "https://api-gateway-us.phorest.com",
+        GRAPHQL_URL: "https://api-gateway-us.phorest.com/api-facade/graphql",
+        TOKEN_URL: "https://api-gateway-us.phorest.com/auth/oauth/token",
+      },
     },
     EU: {
-      SINGLE_BRANCH: {},
+      SINGLE_BRANCH: {
+        IRELAND_MATEUSZ: {
+          ACCOUNT_ID: 92461,
+          BUSINESS_ID: "GIqneoR8AJg9t-2F23_vJw",
+          BRANCH_ID: "SgvKUxC4FKNUPUYw2mF9AQ",
+          staff: [
+            {
+              name: "Test Owner",
+              email: "mateusz.wlodek+owner@phorest.com",
+              id: "SgvKUxC4FKNUPUYw2mF9AQ",
+            },
+            {
+              name: "Test User",
+              email: "testuserMateuszProdSalon@phorest.com",
+              id: "Xpu9Q6lsjsNkzzw6mSgDTg",
+            },
+          ],
+        },
+      },
       MULTI_BRANCH: {},
     },
     US: {
       SINGLE_BRANCH: {},
       MULTI_BRANCH: {
         QA_AUTOMATION_SALON: {
-          ACCOUNT_ID: 44229,
-          BUSINESS_ID: "TAEsIYSBlma1pp4XxSNLYg",
-          BRANCH_ID: "ECQEjnaQgqGZSI23gfvgUw",
-          staff: [
-            {
-              name: "Danny Archer",
-              email: "danny@us.com",
-              id: "rZcT-fQ8AxtDf6t5QI06Qw",
-            },
-            {
-              name: "Donald Tramp",
-              email: "donald@us.com",
-              id: "ECQEjnaQgqGZSI23gfvgUw",
-            },
-            {
-              name: "Peter Griffin",
-              email: "peter@us.com",
-              id: "ohBxdu5JxUffFZHdmHeWwA",
-            },
-          ],
+          BRANCH_QA_AUTOMATION_DEMO: {
+            ACCOUNT_ID: 44229,
+            BUSINESS_ID: "TAEsIYSBlma1pp4XxSNLYg",
+            BRANCH_ID: "ECQEjnaQgqGZSI23gfvgUw",
+            staff: [
+              {
+                name: "Danny Archer",
+                email: "danny@us.com",
+                id: "rZcT-fQ8AxtDf6t5QI06Qw",
+              },
+              {
+                name: "Donald Tramp",
+                email: "donald@us.com",
+                id: "ECQEjnaQgqGZSI23gfvgUw",
+              },
+              {
+                name: "Peter Griffin",
+                email: "peter@us.com",
+                id: "ohBxdu5JxUffFZHdmHeWwA",
+              },
+            ],
+          },
+          BRANCH_ISTVAN_TEST: {
+            ACCOUNT_ID: 9906,
+            BUSINESS_ID: "TAEsIYSBlma1pp4XxSNLYg",
+            BRANCH_ID: "ohBxdu5JxUffFZHdmHeWwA",
+            staff: [
+              {
+                name: "NewYorker",
+                email: "NewYorker@phorest.com",
+                id: "ETJfelgDzp2ewFEUEupOcA",
+              },
+              {
+                name: "Access Test",
+                email: "access_test@test.com",
+                id: "sQQZMhghCHVsZw5ATea-EQ",
+              },
+            ],
+          },
         },
       },
     },

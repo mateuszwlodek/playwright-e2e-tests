@@ -34,7 +34,7 @@ class generalCommands {
   }
 
   async loginByPassProd(page, request, staffEmail, staffPassword) {
-    const response = await request.post(testSalonData.PROD.URL.TOKEN_URL, {
+    const response = await request.post(testSalonData.PROD.URL.US.TOKEN_URL, {
       data: {
         grant_type: "basic",
         client_type: "user",
@@ -58,15 +58,15 @@ class generalCommands {
       localStorage.setItem("access-token", token);
     }, tokenValue);
 
-    await this.checkRevisionKey(page);
+    await page.goto(testSalonData.PROD.URL.BASE_URL);
   }
 
   async checkRevisionKey(page) {
     const revisionKey = process.env.REVISION_KEY;
     if (!revisionKey) {
-      await page.goto("/");
+      await page.goto(testSalonData.DEV.URL.BASE_URL);
     } else {
-      await page.goto(Salon.BASE_URL + "/?revision=" + revisionKey);
+      await page.goto(testSalonData.DEV.URL.BASE_URL + "/?revision=" + revisionKey);
     }
   }
 
