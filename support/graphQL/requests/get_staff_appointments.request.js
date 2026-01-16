@@ -50,4 +50,4 @@ async function getStaffAppointments (file, userID, token, date) {
       return json.data.staffCalendar
     })
 }
-module.exports = { getStaffAppointments }
+export default getStaffAppointments;

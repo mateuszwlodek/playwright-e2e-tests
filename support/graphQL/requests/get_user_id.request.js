@@ -41,4 +41,4 @@ async function getUserID(file, token) {
     });
 }
 
-module.exports = { getUserID };
+export default getUserID;

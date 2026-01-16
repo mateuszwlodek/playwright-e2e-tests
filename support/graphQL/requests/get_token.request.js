@@ -44,4 +44,4 @@ async function getToken (file) {
     })
 }
 
-module.exports = { getToken }
+export default getToken;
