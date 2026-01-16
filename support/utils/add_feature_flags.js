@@ -1,12 +1,19 @@
-const fs = require("fs");
-const json = require("../../fixtures/feature_flags.json");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const jsonPath = path.join(__dirname, "../../fixtures/feature_flags.json");
+const json = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
 
 function addFeatureFlag(featureFlag) {
   return new Promise((resolve, reject) => {
     json.push(featureFlag);
-    fs.writeFile(
-      "./fixtures/feature_flags.json",
-      JSON.stringify(json),
+      fs.writeFile(
+      jsonPath,
+      JSON.stringify(json, null, 2),
       (err) => {
         if (err) reject(err);
         resolve("File saved.");
