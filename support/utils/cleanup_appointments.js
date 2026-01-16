@@ -3,13 +3,14 @@
 // -----------------------------------
 
 // Import necessary GraphQL cleanup functions
-import {
-  deleteUnpaidAppointments,
-} from "../graphQL/functions/delete_unpaid_appointments.js";
-import {
-  deletePaidAppointments,
-} from "../graphQL/functions/delete_paid_appointments.js";
-import { deleteBreaks } from "../graphQL/functions/delete_breaks.js";
+// Note: These files use CommonJS, so we import as default and destructure
+import deleteUnpaidAppointmentsModule from "../graphQL/functions/delete_unpaid_appointments.js";
+import deletePaidAppointmentsModule from "../graphQL/functions/delete_paid_appointments.js";
+import deleteBreaksModule from "../graphQL/functions/delete_breaks.js";
+
+const { deleteUnpaidAppointments } = deleteUnpaidAppointmentsModule;
+const { deletePaidAppointments } = deletePaidAppointmentsModule;
+const { deleteBreaks } = deleteBreaksModule;
 
 // Get environment from command line argument
 const env = process.argv[2];
