@@ -3,13 +3,12 @@
 // -----------------------------------
 
 // Import necessary GraphQL cleanup functions
-// Note: delete_breaks.js is ES module with default export, others are CommonJS
+// Note: delete_breaks.js and delete_unpaid_appointments.js are ES modules with default export
 import deleteBreaks from "../graphQL/functions/delete_breaks.js";
-// CommonJS files - import as default and destructure
-import deleteUnpaidAppointmentsModule from "../graphQL/functions/delete_unpaid_appointments.js";
+import deleteUnpaidAppointments from "../graphQL/functions/delete_unpaid_appointments.js";
+// CommonJS file - import as default and destructure
 import deletePaidAppointmentsModule from "../graphQL/functions/delete_paid_appointments.js";
 
-const { deleteUnpaidAppointments } = deleteUnpaidAppointmentsModule;
 const { deletePaidAppointments } = deletePaidAppointmentsModule;
 
 // Get environment from command line argument
