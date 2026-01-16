@@ -162,8 +162,8 @@ export const testSalonData = {
         US_AUTOMATION_SALON: {
           BRANCH_BOSTON: {
             ACCOUNT_ID: 18846,
-            businessID: "FSWCMOBUVf5damNYzfGq6g",
-            branchID: "O1mNsY6iiDDctfaYf1lD-g",
+            BUSINESS_ID: "FSWCMOBUVf5damNYzfGq6g",
+            BRANCH_ID: "O1mNsY6iiDDctfaYf1lD-g",
             staff: [
               {
                 name: "Cristian Pulisic",
@@ -184,8 +184,8 @@ export const testSalonData = {
           },
           BRANCH_NEW_YORK: {
             ACCOUNT_ID: 13526,
-            businessID: "FSWCMOBUVf5damNYzfGq6g",
-            branchID: "galO-7FDcAyc3KjcFNuwGQ",
+            BUSINESS_ID: "FSWCMOBUVf5damNYzfGq6g",
+            BRANCH_ID: "galO-7FDcAyc3KjcFNuwGQ",
             staff: [
               {
                 name: "NewYorker",
