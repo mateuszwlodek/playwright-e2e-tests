@@ -1,5 +1,12 @@
-const fetch = require('node-fetch')
-const myHeaders = new fetch.Headers()
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const myHeaders = new fetch.Headers();
 
 /*
  * This function not added to the Cypress custom commands as is used in
@@ -8,7 +15,8 @@ const myHeaders = new fetch.Headers()
  * The token can then be used tp perform API calls
  */
 async function getToken (file) {
-  const config = require(`../../config/${file}.json`)
+  const configPath = path.join(__dirname, `../../config/${file}.json`);
+  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const tokenUrl = config.env.tokenUrl
   const email = config.env.staff[0].email
   const staffPassword = process.env.staffPassword
