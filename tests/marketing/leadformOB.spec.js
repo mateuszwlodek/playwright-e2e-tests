@@ -19,13 +19,13 @@ test("Validate that a lead can submit the form on OB @dev @marketing", async ({
 
   await page.goto(
     "https://dev.phorest.com/salon/testuser-4524/book/consultations/form?lead_source=ONLINE_BOOKING",
-    { timeout: 5000 }
+    { timeout: 3000 }
   );
   await formLoadPromise;
 
   // Verify page loaded
   await expect(page.getByText("Request a Call Back")).toBeVisible();
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(3000);
 
   // Fill in first name
   await page
