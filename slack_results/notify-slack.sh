@@ -68,7 +68,7 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
     .suites[] | 
     .specs[] | 
     .tests[] | 
-    select(.ok == false) | 
+    select(.tests[0].status == "unexpected") | 
     "• \(.title) (\(.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
