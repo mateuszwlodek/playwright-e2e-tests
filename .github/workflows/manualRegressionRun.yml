@@ -14,6 +14,7 @@ on:
 env:
 # General environmental variables
   MAILOSAURAPIKEY: ${{ secrets.MAILOSAURAPIKEY }}
+  MAILOSAUR_SERVER_ID: ${{ secrets.MAILOSAUR_SERVER_ID }}
   UK_STRIPE_KEY: ${{ secrets.UK_STRIPE_KEY }}
   IE_STRIPE_KEY: ${{ secrets.IE_STRIPE_KEY }}
   FEATURE_FLAG: ${{ github.event.inputs.feature-flag }}
