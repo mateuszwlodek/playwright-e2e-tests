@@ -72,15 +72,13 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   # Count passed: expected test runs + all test runs from flaky specs (flaky tests count as passed)
   # Flaky tests are specs that have both expected and unexpected test runs
   PASSED=$(jq '
-    def is_flaky:
-      (.tests | map(.status == "expected") | any) and 
-      (.tests | map(.status == "unexpected") | any);
-    
     [
       .suites[] | 
       .specs[] | 
       . as $spec |
-      if is_flaky then
+      # Check if spec is flaky (has both expected and unexpected runs)
+      if (($spec.tests | map(.status == "expected") | any) and 
+          ($spec.tests | map(.status == "unexpected") | any)) then
         # Count all test runs from flaky specs as passed
         $spec.tests[]
       else
@@ -92,18 +90,17 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   
   # Count failed: only truly failed specs (all runs are unexpected, not flaky)
   FAILED=$(jq '
-    def is_flaky:
-      (.tests | map(.status == "expected") | any) and 
-      (.tests | map(.status == "unexpected") | any);
-    
     [
       .suites[] | 
       .specs[] | 
-      select(
-        (is_flaky | not) and 
-        (.tests | map(.status == "unexpected") | all)
-      ) | 
-      .tests[]
+      . as $spec |
+      # Only count as failed if: not flaky AND all runs are unexpected
+      if (($spec.tests | map(.status == "expected") | any | not) and 
+          ($spec.tests | map(.status == "unexpected") | all)) then
+        $spec.tests[]
+      else
+        empty
+      end
     ] | length
   ' "$PLAYWRIGHT_RESULTS_FILE")
   
