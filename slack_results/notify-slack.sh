@@ -63,21 +63,19 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   FAILED=$(jq '[.suites[].specs[].tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   SKIPPED=$(jq '[.suites[].specs[].tests[] | select(.status == "skipped")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   
-  # Extract failed test details
+  # Extract failed test details (from specs that have failed test runs)
   FAILED_TESTS=$(jq -r '
     .suites[] | 
     .specs[] | 
-    .tests[] | 
-    select(.tests[0].status == "unexpected") | 
+    select([.tests[] | select(.status == "unexpected")] | length > 0) |
     "• \(.title) (\(.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
-  # Extract skipped test details
+  # Extract skipped test details (from specs that have skipped test runs)
   SKIPPED_TESTS=$(jq -r '
     .suites[] | 
     .specs[] |
-    .tests[] |  
-    select(.tests[0].status == "skipped") | 
+    select([.tests[] | select(.status == "skipped")] | length > 0) |
     "• \(.title) (\(.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
