@@ -38,10 +38,18 @@ fi
 
 # --- Determine result based on test run results ---
 if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
-  # Count failed test runs (individual test runs, not suites)
-  FAILED_COUNT=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null || echo "0")
+  # Count truly failed specs (specs where all test runs are unexpected, excluding flaky tests)
+  # A spec is flaky if it has both expected and unexpected test runs
+  FAILED_COUNT=$(jq '
+    .suites[] | 
+    .specs[] | 
+    select(
+      (.tests | map(.status == "unexpected") | all) and 
+      (.tests | map(.status == "expected") | any | not)
+    )
+  ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | jq -s 'length' || echo "0")
   
-  # Determine status: if any test failed, it's a failure; otherwise success
+  # Determine status: if any test truly failed (not flaky), it's a failure; otherwise success
   if [[ "$FAILED_COUNT" -gt 0 ]]; then
     STATUS="❌ FAILURE"
     COLOR="#cc0000"
@@ -60,18 +68,57 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   # Count individual test runs (including retries) - flatten all test runs from all specs
   # Each test run/attempt is counted separately, so retries are included
   TOTAL=$(jq '[.suites[] | .specs[] | .tests[]] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  PASSED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "expected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  FAILED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  
+  # Count passed: expected test runs + all test runs from flaky specs (flaky tests count as passed)
+  # Flaky tests are specs that have both expected and unexpected test runs
+  PASSED=$(jq '
+    def is_flaky:
+      (.tests | map(.status == "expected") | any) and 
+      (.tests | map(.status == "unexpected") | any);
+    
+    [
+      .suites[] | 
+      .specs[] | 
+      . as $spec |
+      if is_flaky then
+        # Count all test runs from flaky specs as passed
+        $spec.tests[]
+      else
+        # Count only expected test runs from non-flaky specs
+        $spec.tests[] | select(.status == "expected")
+      end
+    ] | length
+  ' "$PLAYWRIGHT_RESULTS_FILE")
+  
+  # Count failed: only truly failed specs (all runs are unexpected, not flaky)
+  FAILED=$(jq '
+    def is_flaky:
+      (.tests | map(.status == "expected") | any) and 
+      (.tests | map(.status == "unexpected") | any);
+    
+    [
+      .suites[] | 
+      .specs[] | 
+      select(
+        (is_flaky | not) and 
+        (.tests | map(.status == "unexpected") | all)
+      ) | 
+      .tests[]
+    ] | length
+  ' "$PLAYWRIGHT_RESULTS_FILE")
+  
   SKIPPED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "skipped")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   
-  # Extract failed test runs (individual test runs, not just specs)
+  # Extract failed test runs (only truly failed specs, not flaky)
   FAILED_TESTS=$(jq -r '
     .suites[] | 
     .specs[] | 
+    select(
+      (.tests | map(.status == "unexpected") | all) and 
+      (.tests | map(.status == "expected") | any | not)
+    ) |
     . as $spec |
-    .tests[] |
-    select(.status == "unexpected") |
-    "• \($spec.title) - Attempt \(.retry + 1) (\($spec.file | split("/") | .[-1]))"
+    "• \($spec.title) (\($spec.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
   # Extract skipped test runs (individual test runs)
