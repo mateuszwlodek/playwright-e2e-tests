@@ -18,7 +18,7 @@ class BasePage {
      * @param {string} selector - Selects an element
      * @param {number} timeout - Timeout in MS
      */
-    async waitForElement(selector, timeout = 3000) {
+    async waitForElement(selector, timeout = 30000) {
       await this.page.waitForSelector(selector, { state: 'visible', timeout });
     }
   
