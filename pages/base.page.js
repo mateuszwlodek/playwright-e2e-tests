@@ -119,7 +119,7 @@ class BasePage {
      * @param {RegExp|string} pattern - URL pattern to match
      * @param {number} timeout - Timeout in milliseconds
      */
-    async waitForURL(pattern, timeout = 3000) {
+    async waitForURL(pattern, timeout = 30000) {
       await this.page.waitForURL(pattern, { timeout });
     }
   
