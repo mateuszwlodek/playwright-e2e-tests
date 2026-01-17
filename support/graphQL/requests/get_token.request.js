@@ -19,7 +19,7 @@ async function getToken (file) {
   const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
   const tokenUrl = config.env.tokenUrl
   const email = config.env.staff[0].email
-  const staffPassword = process.env.staffPassword
+  const staffPassword = process.env.DEV_staffPassword
 
   myHeaders.append('Content-Type', 'application/json')
 
