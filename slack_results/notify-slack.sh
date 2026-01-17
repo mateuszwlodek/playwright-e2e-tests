@@ -38,8 +38,8 @@ fi
 
 # --- Determine result based on test run results ---
 if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
-  # Count failed tests
-  FAILED_COUNT=$(jq '[.suites[].specs[].tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null || echo "0")
+  # Count failed test runs (individual test runs, not suites)
+  FAILED_COUNT=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null || echo "0")
   
   # Determine status: if any test failed, it's a failure; otherwise success
   if [[ "$FAILED_COUNT" -gt 0 ]]; then
@@ -57,26 +57,31 @@ fi
 
 # --- Parse Playwright JSON ---
 if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
-  # Count individual test cases (tests) instead of specs
-  TOTAL=$(jq '[.suites[].specs[].tests[]] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  PASSED=$(jq '[.suites[].specs[].tests[] | select(.status == "expected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  FAILED=$(jq '[.suites[].specs[].tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  SKIPPED=$(jq '[.suites[].specs[].tests[] | select(.status == "skipped")] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  # Count individual test runs (including retries) - flatten all test runs from all specs
+  # Each test run/attempt is counted separately, so retries are included
+  TOTAL=$(jq '[.suites[] | .specs[] | .tests[]] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  PASSED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "expected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  FAILED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  SKIPPED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "skipped")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   
-  # Extract failed test details (from specs that have failed test runs)
+  # Extract failed test runs (individual test runs, not just specs)
   FAILED_TESTS=$(jq -r '
     .suites[] | 
     .specs[] | 
-    select([.tests[] | select(.status == "unexpected")] | length > 0) |
-    "• \(.title) (\(.file | split("/") | .[-1]))"
+    . as $spec |
+    .tests[] |
+    select(.status == "unexpected") |
+    "• \($spec.title) - Attempt \(.retry + 1) (\($spec.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
-  # Extract skipped test details (from specs that have skipped test runs)
+  # Extract skipped test runs (individual test runs)
   SKIPPED_TESTS=$(jq -r '
     .suites[] | 
     .specs[] |
-    select([.tests[] | select(.status == "skipped")] | length > 0) |
-    "• \(.title) (\(.file | split("/") | .[-1]))"
+    . as $spec |
+    .tests[] |
+    select(.status == "skipped") |
+    "• \($spec.title) - Attempt \(.retry + 1) (\($spec.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
   # Extract test file names (unique, sorted)
