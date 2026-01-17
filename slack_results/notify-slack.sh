@@ -38,24 +38,10 @@ fi
 
 # --- Determine result based on test run results ---
 if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
-  # Count truly failed test runs (excluding flaky tests)
-  # A spec is flaky if it has both expected and unexpected test runs
-  FAILED_COUNT=$(jq '
-    [
-      .suites[] | 
-      .specs[] | 
-      . as $spec |
-      # Only count as failed if: not flaky AND all runs are unexpected
-      if (($spec.tests | map(.status == "expected") | any | not) and 
-          ($spec.tests | map(.status == "unexpected") | all)) then
-        $spec.tests[]
-      else
-        empty
-      end
-    ] | length
-  ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null || echo "0")
+  # Count failed test runs (individual test runs, not suites)
+  FAILED_COUNT=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null || echo "0")
   
-  # Determine status: if any test truly failed (not flaky), it's a failure; otherwise success
+  # Determine status: if any test failed, it's a failure; otherwise success
   if [[ "$FAILED_COUNT" -gt 0 ]]; then
     STATUS="❌ FAILURE"
     COLOR="#cc0000"
@@ -74,68 +60,18 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   # Count individual test runs (including retries) - flatten all test runs from all specs
   # Each test run/attempt is counted separately, so retries are included
   TOTAL=$(jq '[.suites[] | .specs[] | .tests[]] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  PASSED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "expected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  
-  # Count flaky test runs (from specs that have both expected and unexpected runs)
-  FLAKY=$(jq '
-    [
-      .suites[] | 
-      .specs[] | 
-      . as $spec |
-      # Check if spec is flaky (has both expected and unexpected runs)
-      if (($spec.tests | map(.status == "expected") | any) and 
-          ($spec.tests | map(.status == "unexpected") | any)) then
-        $spec.tests[]
-      else
-        empty
-      end
-    ] | length
-  ' "$PLAYWRIGHT_RESULTS_FILE")
-  
-  # Count failed: only truly failed specs (all runs are unexpected, not flaky)
-  FAILED=$(jq '
-    [
-      .suites[] | 
-      .specs[] | 
-      . as $spec |
-      # Only count as failed if: not flaky AND all runs are unexpected
-      if (($spec.tests | map(.status == "expected") | any | not) and 
-          ($spec.tests | map(.status == "unexpected") | all)) then
-        $spec.tests[]
-      else
-        empty
-      end
-    ] | length
-  ' "$PLAYWRIGHT_RESULTS_FILE")
-  
+  PASSED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "expected" or .status == "flaky")] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  FAILED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   SKIPPED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "skipped")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   
-  # Extract flaky test specs (specs that have both expected and unexpected runs)
-  FLAKY_TESTS=$(jq -r '
-    .suites[] | 
-    .specs[] | 
-    . as $spec |
-    # Check if spec is flaky
-    if (($spec.tests | map(.status == "expected") | any) and 
-        ($spec.tests | map(.status == "unexpected") | any)) then
-      "• \($spec.title) (\($spec.file | split("/") | .[-1]))"
-    else
-      empty
-    end
-  ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
-  
-  # Extract failed test runs (only truly failed specs, not flaky)
+  # Extract failed test runs (individual test runs, not just specs)
   FAILED_TESTS=$(jq -r '
     .suites[] | 
     .specs[] | 
     . as $spec |
-    # Only count as failed if: not flaky AND all runs are unexpected
-    if (($spec.tests | map(.status == "expected") | any | not) and 
-        ($spec.tests | map(.status == "unexpected") | all)) then
-      "• \($spec.title) (\($spec.file | split("/") | .[-1]))"
-    else
-      empty
-    end
+    .tests[] |
+    select(.status == "unexpected") |
+    "• \($spec.title) - Attempt \(.retry + 1) (\($spec.file | split("/") | .[-1]))"
   ' "$PLAYWRIGHT_RESULTS_FILE" 2>/dev/null | head -10)
   
   # Extract skipped test runs (individual test runs)
@@ -156,16 +92,11 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   if [[ -n "$REVISION_KEY" ]]; then
     SUMMARY_TEXT="$SUMMARY_TEXT"$'\n'"*Revision Key:* \`$REVISION_KEY\`"
   fi
-  SUMMARY_TEXT="$SUMMARY_TEXT"$'\n'"*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED | Flaky: $FLAKY | Skipped: $SKIPPED"
+  SUMMARY_TEXT="$SUMMARY_TEXT"$'\n'"*Summary:* Total: $TOTAL | Passed: $PASSED | Failed: $FAILED | Skipped: $SKIPPED"
   
   # Add failed tests if any
   if [[ -n "$FAILED_TESTS" ]]; then
     SUMMARY_TEXT="$SUMMARY_TEXT"$'\n\n'"*Failed Tests:*"$'\n'"$FAILED_TESTS"
-  fi    
-  
-  # Add flaky tests if any
-  if [[ -n "$FLAKY_TESTS" ]]; then
-    SUMMARY_TEXT="$SUMMARY_TEXT"$'\n\n'"*Flaky Tests:*"$'\n'"$FLAKY_TESTS"
   fi
   
   # Add skipped tests if any
@@ -177,7 +108,6 @@ else
   TOTAL="N/A"
   PASSED="N/A"
   FAILED="N/A"
-  FLAKY="N/A"
   SKIPPED="N/A"
   SUMMARY_TEXT="Test results file not found"
 fi
