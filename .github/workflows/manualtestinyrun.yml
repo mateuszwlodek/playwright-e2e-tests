@@ -54,7 +54,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
-        node-version: 22
+        node-version: 18
     - name: Add feature flags
       run: node ./support/utils/add_feature_flags.js ${{ env.FEATURE_FLAG }}
     - name: Install dependencies
@@ -65,7 +65,7 @@ jobs:
       run: npx playwright test
     - name: Publish Test Results
       if: always()
-      uses: dorny/test-reporter@b082adf # v2.5.0
+      uses: dorny/test-reporter@v2
       with:
         name: Playwright Tests
         path: playwright-results/results.xml
