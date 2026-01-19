@@ -62,6 +62,16 @@ jobs:
       id: playwright-test
       run: npx playwright test
       continue-on-error: true
+    - name: Publish Test Results
+      if: always()
+      uses: dorny/test-reporter@v2
+      with:
+        name: Playwright Tests
+        path: playwright-results/results.xml
+        reporter: java-junit
+        list-suites: all
+        list-tests: all
+        max-annotations: 50
     - uses: actions/upload-artifact@v4
       if: always() && !cancelled()
       with:
