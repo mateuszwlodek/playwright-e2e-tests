@@ -56,8 +56,8 @@ async function deletePaidAppointments (file) {
   const apiUrl = config.env.apiUrl
   const businessID = config.env.businessID
   const branchID = config.env.branchID
-  const username = process.env.apiUsername
-  const password = process.env.apiPassword
+  const username = process.env.DEV_apiUsername
+  const password = process.env.DEV_apiPassword
 
   const getPaidAppointmentsURL = `${apiUrl}/memento/rest/business/${businessID}/branch/${branchID}/purchase?date=>=${startDate}&date=<=${endDate}`
 

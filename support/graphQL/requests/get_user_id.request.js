@@ -2,13 +2,12 @@ import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import userModule from "../queries/user.query.js";
+import user from "../queries/user.query.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const myHeaders = new fetch.Headers();
-const { user } = userModule;
 
 async function getUserID(file, token) {
   const configPath = path.join(__dirname, `../../config/${file}.json`);

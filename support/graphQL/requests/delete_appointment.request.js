@@ -2,13 +2,12 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import appointmentsModule from '../queries/appointments.query.js';
+import appointments from '../queries/appointments.query.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const myHeaders = new fetch.Headers();
-const { appointments } = appointmentsModule;
 
 async function deleteAppointment (file, token, userID, appointmentId) {
   const configPath = path.join(__dirname, `../../config/${file}.json`);

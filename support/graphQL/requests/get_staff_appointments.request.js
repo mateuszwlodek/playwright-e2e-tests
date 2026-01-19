@@ -2,13 +2,12 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import staffModule from '../queries/staff.query.js';
+import staff from '../queries/staff.query.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const myHeaders = new fetch.Headers();
-const { staff } = staffModule;
 
 /*
  * This function not added to the Cypress custom commands as is used in

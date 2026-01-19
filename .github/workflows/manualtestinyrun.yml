@@ -89,3 +89,6 @@ jobs:
           -P GM \
           --junit playwright-results/results.xml \
           --name "Playwright_Testrun_$(date +'%Y-%m-%d_%H-%M-%S')"
+    - name: Fail workflow if tests failed
+      if: steps.playwright-test.outcome == 'failure'
+      run: exit 1

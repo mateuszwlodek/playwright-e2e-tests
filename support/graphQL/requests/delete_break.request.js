@@ -2,13 +2,12 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import breaksModule from '../queries/breaks.query.js';
+import breaks from '../queries/breaks.query.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const myHeaders = new fetch.Headers();
-const { breaks } = breaksModule;
 
 async function deleteBreak (file, token, userID, breakId) {
   const configPath = path.join(__dirname, `../../config/${file}.json`);

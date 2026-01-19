@@ -60,7 +60,7 @@ if [[ -f "$PLAYWRIGHT_RESULTS_FILE" ]]; then
   # Count individual test runs (including retries) - flatten all test runs from all specs
   # Each test run/attempt is counted separately, so retries are included
   TOTAL=$(jq '[.suites[] | .specs[] | .tests[]] | length' "$PLAYWRIGHT_RESULTS_FILE")
-  PASSED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "expected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
+  PASSED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "expected" or .status == "flaky")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   FAILED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "unexpected")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   SKIPPED=$(jq '[.suites[] | .specs[] | .tests[] | select(.status == "skipped")] | length' "$PLAYWRIGHT_RESULTS_FILE")
   

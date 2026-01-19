@@ -66,3 +66,6 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    - name: Fail workflow if tests failed
+      if: steps.playwright-test.outcome == 'failure'
+      run: exit 1
