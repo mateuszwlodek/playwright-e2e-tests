@@ -10,7 +10,7 @@ test("Validate that user can create & send an email campaign to Mailosaur @smoke
   page,
   request,
 }) => {
-  test.setTimeout(10000);
+  test.setTimeout(240000);
   //Test Data
   const staffEmailDev =
     testSalonData.DEV.EU.SINGLE_BRANCH.IRELAND_SALON.staff[0].email;
@@ -36,7 +36,7 @@ test("Validate that user can create & send an email campaign to Mailosaur @smoke
     campaignName,
     subject,
     emailBody,
-    "Mailosaur EmailInbox"
+    "Automation MailosaurEmail"
   );
 
   // Verify the email in Mailosaur
