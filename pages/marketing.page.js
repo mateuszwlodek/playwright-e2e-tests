@@ -84,7 +84,7 @@ class MarketingPage extends BasePage {
   await frame.locator(this.createBlankButton).click();
     
   //Wait for campaign editor to load
-  await this.page.waitForTimeout(3000);
+  await this.page.waitForTimeout(10000);
     
   //Look for rename button in iframe
   const renameButtonExists = await frame.locator(this.renameCampaignButton)
@@ -95,7 +95,7 @@ class MarketingPage extends BasePage {
     await frame.locator(this.renameCampaignButton).click();
       
   //Wait for modal to appear on main page
-  await this.page.waitForTimeout(3000);
+  await this.page.waitForTimeout(10000);
       
   //The input is in iframe with name = "campaign-name"
     const modalInput = frame.locator('input[name="campaign-name"]');
