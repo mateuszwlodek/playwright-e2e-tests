@@ -45,7 +45,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
-        node-version: lts/*
+        node-version: 22
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
@@ -54,7 +54,7 @@ jobs:
       run: npx playwright test
     - name: Publish Test Results
       if: always()
-      uses: dorny/test-reporter@v2.5.0
+      uses: dorny/test-reporter@b082adf # v2.5.0
       with:
         name: Playwright Tests
         path: playwright-results/results.xml
