@@ -36,7 +36,7 @@ test("Validate that user can create & send an email campaign to Mailosaur @smoke
     campaignName,
     subject,
     emailBody,
-    "Automation MailosaurEmail"
+    "Automation Mailosaur2"
   );
 
   // Verify the email in Mailosaur
