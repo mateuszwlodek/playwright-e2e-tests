@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 import generalCommands from "../../../support/generalCommands.js";
 import { testSalonData } from "../../../testData/salonData.js";
+import { navigation } from "../../../locators/navigation.js";
+import { marketingLocators } from "../../../locators/marketing/marketing.locators.js";
 
 test("Validate that user can open Phorest Ads Manager @marketing @smoke", async ({
   page,
@@ -19,10 +21,12 @@ test("Validate that user can open Phorest Ads Manager @marketing @smoke", async 
     staffPasswordDev,
   );
 
- //Navigate to Marketing in the side menu 
-    await page.locator('[id="main-nav-marketing-link"]').click();
- //Navigate to Ads Manager in Marketing Main menu 
-   await page.locator('[name="manage-my-ads"]').click();
- //Assert that Facebook & Instagram Ads is displayed in Ads Manager 
-   await expect(page.getByText('Facebook & Instagram Ads')).toBeVisible();
+  // Navigate to Marketing in the side menu
+  await page.locator(navigation.marketingSideNav).click();
+  
+  // Navigate to Ads Manager in Marketing Main menu
+  await page.locator(marketingLocators.manageMyAdsLink).click();
+  
+  // Assert that Facebook & Instagram Ads is displayed in Ads Manager
+  await expect(page.locator(marketingLocators.facebookInstagramAdsText)).toBeVisible();
 });

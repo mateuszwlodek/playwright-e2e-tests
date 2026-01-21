@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { leadFormLocators } from "../../locators/marketing/leadform.locators.js";
 
 // Validate that user can submit lead form on OB
 test("Validate that a lead can submit the form on OB @dev @marketing", async ({
@@ -29,49 +30,45 @@ test("Validate that a lead can submit the form on OB @dev @marketing", async ({
 
   // Fill in first name
   await page
-    .locator('[data-testid="firstNameInput"]')
+    .locator(leadFormLocators.firstNameInput)
     .waitFor({ state: "visible", timeout: 100 });
-  await page.locator('[data-testid="firstNameInput"]').click({ force: true });
-  await page.locator('[data-testid="firstNameInput"]').fill(LeadFirstName);
+  await page.locator(leadFormLocators.firstNameInput).fill(LeadFirstName);
 
   // Fill in last name
   await page
-    .locator('[data-testid="lastNameInput"]')
+    .locator(leadFormLocators.lastNameInput)
     .waitFor({ state: "visible", timeout: 100 });
-  await page.locator('[data-testid="lastNameInput"]').click();
-  await page.locator('[data-testid="lastNameInput"]').fill(LeadLastName);
+  await page.locator(leadFormLocators.lastNameInput).fill(LeadLastName);
 
   // Fill in phone number
   await page
-    .locator('[data-testid="phoneInput"]')
+    .locator(leadFormLocators.phoneInput)
     .waitFor({ state: "visible", timeout: 100 });
-  await page.locator('[data-testid="phoneInput"]').click();
-  await page.locator('[data-testid="phoneInput"]').fill(MobilePhoneNumber);
+  await page.locator(leadFormLocators.phoneInput).fill(MobilePhoneNumber);
 
   // Fill in email
   await page
-    .locator('[data-testid="emailInput"]')
+    .locator(leadFormLocators.emailInput)
     .waitFor({ state: "visible", timeout: 100 });
-  await page.locator('[data-testid="emailInput"]').click();
-  await page.locator('[data-testid="emailInput"]').fill(Email);
+  await page.locator(leadFormLocators.emailInput).fill(Email);
 
   // Select email option (clicking the second image)
-  await page.locator("img").nth(1).click();
+  await page.locator(leadFormLocators.emailOptionImage).nth(leadFormLocators.emailOptionImageIndex).click();
 
   // Add a note
-  await page.locator('[data-testid="noteInput"]').click();
+  await page.locator(leadFormLocators.noteInput).click();
   await page
-    .locator('[data-testid="noteInput"]')
+    .locator(leadFormLocators.noteInput)
     .fill(
       "Hello, can you tell me more about the packages you offer at your salon?"
     );
 
   // Submit the form
-  await page.locator('[data-testid="submitButton"]').click();
+  await page.locator(leadFormLocators.submitButton).click();
 
   // Assert that lead form is submitted and user can see the return button
   await page.waitForTimeout(2000);
-  await expect(page.locator('[data-testid="goToHomePageButton"]')).toHaveText(
+  await expect(page.locator(leadFormLocators.goToHomePageButton)).toHaveText(
     "Return to Home Page"
   );
 });

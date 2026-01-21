@@ -6,10 +6,13 @@ on:
         type: choice
         description: 'Select a tag'
         options:
+        - '@dev'
+        - '@prod'
         - '@login'
         - '@smoke'
-        - '@break'
-        default: '@login'
+        - '@voucher'
+        - '@marketing'
+        default: '@dev'
 env:
 # General environmental variables
   MAILOSAURAPIKEY: ${{ secrets.MAILOSAURAPIKEY }}
