@@ -91,8 +91,4 @@ test("Create new voucher with GraphQL check it on the UI and archive it @dev @vo
     TEST_CONFIG.testSalon,
     true, // validate response
   );
-
-  // Response is already validated in voucherRequests
-  // Additional assertions can be added here if needed
-  expect(archiveResult.count).toBeGreaterThanOrEqual(0);
 });

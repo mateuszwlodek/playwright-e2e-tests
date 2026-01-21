@@ -12,6 +12,9 @@ const staffPasswordProd = process.env.PROD_staffPassword;
 test("Check ByPass login on Dev @dev @login @smoke", async ({ page, request }) => {
   await generalCommands.loginByPassDev(page, request, staffEmailDev, staffPasswordDev);
   await generalCommands.loadFeatureFlags(page);
+  await expect(page).toHaveURL(
+    testSalonData.DEV.URL.BASE_URL + "/a/" + testSalonData.DEV.EU.SINGLE_BRANCH.IRELAND_SALON.ACCOUNT_ID + "/appointments"
+  );
 });
 
 test("Check manual login on Dev @dev @login", async ({ page }) => {
