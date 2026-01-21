@@ -32,4 +32,8 @@ export const marketingLocators = {
   // Send campaign locators (in iframe)
   sendMyCampaignButton: '[name="send-my-campaign"]',
   sendCampaignButton: '[name="send-campaign"]',
+  
+  // Ads Manager locators
+  manageMyAdsLink: '[name="manage-my-ads"]',
+  facebookInstagramAdsText: 'text="Facebook & Instagram Ads"',
 };
