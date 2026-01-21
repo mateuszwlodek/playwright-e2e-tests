@@ -43,5 +43,16 @@ fragment moneyFields on Money {
   currency
   __typename
 }`,
+bulkArchive: `mutation BulkArchiveVouchers($bulkRequest: BulkRequestInput!, $filterBy: GetVouchersFilterBy!, $archive: Boolean!) {
+  bulkArchiveVouchers(
+    bulkRequest: $bulkRequest
+    filterBy: $filterBy
+    archive: $archive
+  ) {
+    count
+    __typename
+  }
+}
+`
 };
 export default voucher;
