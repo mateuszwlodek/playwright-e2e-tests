@@ -17,7 +17,7 @@ test("Validate that user can open Phorest Ads Manager @marketing @smoke", async 
     request,
     staffEmailDev,
     staffPasswordDev,
-  ),
+  );
 
  //Navigate to Marketing in the side menu 
     await page.locator('[id="main-nav-marketing-link"]').click();
