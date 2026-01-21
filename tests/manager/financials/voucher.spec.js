@@ -3,8 +3,7 @@ import { test, expect, request } from "@playwright/test";
 import { testSalonData } from "../../../testData/salonData.js";
 import generalCommands from "../../../support/generalCommands.js";
 import voucherRequests from "../../../support/requests/voucher.requests.js";
-import { navigation } from "../../../locators/navigation.js";
-import { voucherLocators } from "../../../locators/manager/financials/voucher.locators.js";
+import VoucherPage from "../../../pages/manager/financials/voucher.page.js";
 
 // Test configuration
 const TEST_CONFIG = {
@@ -77,20 +76,12 @@ test("Create new voucher with GraphQL check it on the UI and archive it @dev @vo
     true, // validate response
   );
 
-  // Check Voucher on the UI
-  await page.goto(testSalonData.DEV.URL.BASE_URL);
-  await page.locator(navigation.managerSideNav).click();
-  await page.locator(navigation.vouchers).click();
-  
-  await page.locator(voucherLocators.searchByClientName).fill("TestAutomation");
-  await expect(
-    page.locator(voucherLocators.clientNameColumn).nth(0),
-  ).toHaveText("TestAutomation User");
-  await expect(
-    page.locator(voucherLocators.originalBalanceColumn).nth(0),
-  ).toHaveText("€" + voucherData.input.originalBalance + ".00");
-  await expect(page.locator(voucherLocators.remainingColumn).nth(0)).toHaveText(
-    "€" + voucherData.input.remainingBalance + ".00",
+  // Check Voucher on the UI using Page Object Model
+  const voucherPage = new VoucherPage(page);
+  await voucherPage.navigateSearchAndVerify(
+    testSalonData.DEV.URL.BASE_URL,
+    "TestAutomation",
+    voucherData,
   );
 
   // Execute request with validation
